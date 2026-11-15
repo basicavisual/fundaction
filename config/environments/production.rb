@@ -22,8 +22,9 @@ Rails.application.configure do
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  # Where uploaded files are stored (see config/storage.yml): local, mirror
+  # (disk + Spaces, used during the migration) or digitalocean.
+  config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "local").to_sym
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
@@ -58,16 +59,25 @@ Rails.application.configure do
   # Rails cache configuration
   #
 
-  # Prefix cache keys with deployed git revision (stored in REVISION on
-  # production servers), so we do not need to clear the cache after
-  # deployments.
-  revision = File.read(Rails.root/"REVISION").chomp rescue "63b178c"
+  # Prefix cache keys with the deployed git revision, so we do not need to
+  # clear the cache after deployments. Set REVISION to override it (e.g. when
+  # the app directory is not a git checkout).
+  revision = ENV["REVISION"].presence ||
+             `git -C #{Rails.root} rev-parse --short HEAD 2>/dev/null`.strip.presence ||
+             "norevision"
 
-  memcached_servers = ENV.fetch('MEMCACHED_SERVERS'){ "127.0.0.1:11211" }.split
-  concurrency       = ENV.fetch('NUM_THREADS'){ 5 }
-  #config.cache_store = :mem_cache_store, *memcached_servers, { namespace: "#{instance_name}:#{revision}:default", pool_size: concurrency }
-  config.cache_store = :mem_cache_store, "127.0.0.1:11211", { pool_size: 5, pool_timeout: 5 }
-  #config.cache_store = :memory_store, { size: 64.megabytes }
+  # Redis database 2 by default; ActionCable uses database 1 (config/cable.yml).
+  # On Redis errors, log and treat it as a cache miss instead of failing the request.
+  config.cache_store = :redis_cache_store, {
+    url: ENV.fetch("REDIS_CACHE_URL") { "redis://localhost:6379/2" },
+    namespace: "#{instance_name}:#{revision}",
+    pool_size: ENV.fetch("RAILS_MAX_THREADS") { 5 }.to_i,
+    pool_timeout: 5,
+    error_handler: ->(method:, returning:, exception:) {
+      Rails.logger.warn("[cache] #{method} failed: #{exception.class}: #{exception.message}")
+    }
+  }
+
   # Use a real queuing backend for Active Job (and separate queues per environment)
   config.active_job.queue_adapter     = :delayed_job
   config.action_mailer.perform_caching = false

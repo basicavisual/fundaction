@@ -19,7 +19,6 @@
 .byebug_history
 
 # Ignore public uploads
-public/uploads
 public/decidim-packs
 storage/*
 .rbenv-vars
@@ -36,3 +35,7 @@ config/smtp_settings.yml
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# Local credentials for scripts/db_pull.sh
+scripts/db_pull.env
+db/dumps/
