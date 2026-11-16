@@ -13,6 +13,8 @@ The main objectives of this release are as follows:
 
 ## Changes:
 - Production cache store is now Redis instead of memcached, namespaced by instance and revision
+- Requests to /rails/active_storage (images, attachments) no longer count towards the per-IP throttle that answered "Retry later" (config/initializers/rack_attack.rb). A page with 22 images used about 45 of the 100 requests per minute
+- `DECIDIM_THROTTLING_MAX_REQUESTS` and `DECIDIM_THROTTLING_PERIOD` (seconds) are now actually read (config/initializers/decidim.rb); they were ignored before
 - Cache namespace revision now comes from `REVISION` env var or the app's git HEAD (was a Capistrano REVISION file)
 
 ## Removals:
