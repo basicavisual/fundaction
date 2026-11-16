@@ -1,3 +1,8 @@
+# Unreleased
+
+## Changes:
+- `Decidim.available_locales` is now limited to the locales the organization uses (`en` by default, override with the `DECIDIM_AVAILABLE_LOCALES` env var, comma-separated). It defaulted to all 47 locales, and Decidim 0.26 rebuilds component settings with one attribute per translatable setting per locale every time they are read (1,059 times on the Redistribute 2026 proposals index). The page took ~60s to render with 175M allocations; it now takes ~4s with 7M (measured in development on a copy of production data)
+
 # Release 4.0
 
 The main objectives of this release are as follows:

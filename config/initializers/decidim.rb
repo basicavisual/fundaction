@@ -5,8 +5,13 @@ Decidim.configure do |config|
   config.application_name = "FundAction's Assembly"
   config.mailer_sender = %{FundAction's Assembly <assembly@fundaction.eu>}
 
-  # Uncomment this lines to set your preferred locales
-  # config.available_locales = [:en, :ca, :es]
+  # Locales the platform supports. Keep this to the locales organizations
+  # actually use: Decidim 0.26 rebuilds component settings on every access and
+  # defines every translatable setting once per locale here, so the default
+  # (all 47 locales) made the proposals index take ~60s to render.
+  # Every organization's available_locales (set in /system) must be in this list.
+  config.available_locales = ENV["DECIDIM_AVAILABLE_LOCALES"].presence.to_s.split(",").map(&:strip).reject(&:empty?).map(&:to_sym).presence || [:en]
+  config.default_locale = :en
 
   # Geocoder configuration
   # config.geocoder = {
