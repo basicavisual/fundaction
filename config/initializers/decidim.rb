@@ -34,6 +34,12 @@ Decidim.configure do |config|
 
   config.unconfirmed_access_for = 2.days
   config.track_newsletter_links = true
+
+  # Per-IP request throttling (production only): at most MAX requests every
+  # PERIOD seconds, then "Retry later". File requests (/rails/active_storage)
+  # are not counted, see config/initializers/rack_attack.rb.
+  config.throttling_max_requests = ENV.fetch("DECIDIM_THROTTLING_MAX_REQUESTS", 100).to_i
+  config.throttling_period = ENV.fetch("DECIDIM_THROTTLING_PERIOD", 60).to_i.seconds
 end
 
 Rails.application.config.i18n.available_locales = Decidim.available_locales

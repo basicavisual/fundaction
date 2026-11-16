@@ -5,3 +5,19 @@ test:
 local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
+
+# DigitalOcean Spaces (S3-compatible). Private bucket: Rails 6.0 serves files
+# through signed, expiring URLs.
+digitalocean:
+  service: S3
+  endpoint: <%= ENV.fetch("SPACES_ENDPOINT", "https://fra1.digitaloceanspaces.com") %>
+  region: <%= ENV.fetch("SPACES_REGION", "fra1") %>
+  bucket: <%= ENV["SPACES_BUCKET"] %>
+  access_key_id: <%= ENV["SPACES_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= ENV["SPACES_SECRET_ACCESS_KEY"] %>
+
+# Transition service: writes go to disk and Spaces, reads come from disk.
+mirror:
+  service: Mirror
+  primary: local
+  mirrors: [digitalocean]

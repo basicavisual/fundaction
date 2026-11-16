@@ -13,9 +13,7 @@ gem 'decidim-members', git: 'https://github.com/basicavisual/decidim-members'
 
 gem 'uglifier', "~> 4.1"
 gem "faker", "~> 2.14"
-gem "wicked_pdf", "~> 2.1"
-
-#gem 'rack-attack'
+gem "wicked_pdf", "~> 2.7.0"
 
 gem 'country_select', "~> 3.1", require: 'country_select_without_sort_alphabetical'
 gem 'language_list'
@@ -24,22 +22,16 @@ gem 'language_list'
 # More exactly in comments in the homepage and in processes cards in the processes listing
 #gem 'nokogiri' #, "1.13.4"
 gem 'truncato', '0.7.12'
-# GHSA-p4x4-rw2p-8j8m
-#gem "sanitize", ">= 5.2.1"
-
-#gem 'kaminari', '~> 1.2.1'
 
 gem 'figaro'
 
-# GHSA-g6wq-qcwm-j5g2
-#gem "websocket-extensions", ">= 0.1.5"
+gem "aws-sdk-s3", "~> 1.0", require: false
+gem "redis", "~> 4.8"
 
 group :development, :test do
   gem 'byebug', platform: :mri
   #gem "decidim-dev", DECIDIM_VERSION
 end
-
-#gem "puma", ">= 5.0.0"
 gem "puma", ">= 5.5.1"
 gem "bootsnap", "~> 1.4"
 
@@ -66,5 +58,4 @@ group :production do
   gem 'connection_pool'
   gem 'delayed_job_active_record'
   gem 'daemons'
-  gem 'dalli'
 end
