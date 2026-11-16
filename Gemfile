@@ -13,7 +13,7 @@ gem 'decidim-members', git: 'https://github.com/basicavisual/decidim-members'
 
 gem 'uglifier', "~> 4.1"
 gem "faker", "~> 2.14"
-gem "wicked_pdf", "~> 2.1"
+gem "wicked_pdf", "~> 2.7.0"
 
 gem 'country_select', "~> 3.1", require: 'country_select_without_sort_alphabetical'
 gem 'language_list'

@@ -41,6 +41,12 @@ if [[ -f "$ENV_FILE" ]]; then
 fi
 export RAILS_ENV="${RAILS_ENV:-production}"
 
+# cron runs with a minimal PATH; make rbenv's ruby and bundle available.
+RBENV_ROOT="${RBENV_ROOT:-$HOME/.rbenv}"
+if [[ -d "$RBENV_ROOT" ]]; then
+  export PATH="$RBENV_ROOT/shims:$RBENV_ROOT/bin:$PATH"
+fi
+
 cd "$PROJECT_ROOT" || exit 1
 
 TASKS=(
