@@ -58,5 +58,4 @@ group :production do
   gem 'connection_pool'
   gem 'delayed_job_active_record'
   gem 'daemons'
-  gem 'dalli'
 end

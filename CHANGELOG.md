@@ -1,4 +1,4 @@
-# Unreleased
+# Release 4.0
 
 The main objectives of this release are as follows:
 - Moving ActiveStorage files to DigitalOcean Spaces
@@ -22,6 +22,7 @@ The main objectives of this release are as follows:
 - CarrierWave initializer; the CarrierWave → ActiveStorage migration is complete
 - `public/uploads` and its .gitignore entry
 - Dockerfile and docker-compose.yml (outdated; Docker deploys will be set up from scratch)
+- `dalli` gem and memcached; the Rails cache is on Redis
 
 # Release 3.0
 
